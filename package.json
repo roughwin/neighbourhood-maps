@@ -1,5 +1,8 @@
 {
   "devDependencies": {
-    "gulp": "^3.9.1"
+    "browser-sync": "^2.18.8",
+    "gulp": "^3.9.1",
+    "gulp-delete-lines": "^0.0.7",
+    "gulp-minifier": "^0.2.1"
   }
 }
