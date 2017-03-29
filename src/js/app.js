@@ -1,4 +1,5 @@
 var w = window;
+var model = ko.observableArray();
 function initMap() {
     w.map = new google.maps.Map(document.getElementById('map'), {
         center:  {lat: 30.284863403785405, lng: 120.11222183704376},
@@ -32,16 +33,14 @@ function drawmark() {
                 map: w.map,
                 title: e.name
             })
-            markers.push(marker)
+            model.push(marker);
             console.log(e);
         })
+        ko.applyBindings(model);
+
         $('#address').val(markers.length);
     });
-    // var marker = new google.maps.Marker({
-    //     position: mark,
-    //     map: map,
-    //     title: 'title test'
-    // })
 
 }
+
 //AIzaSyAGnhR_0_6K7xOjz3Jy15uoz06JlTi6mME
