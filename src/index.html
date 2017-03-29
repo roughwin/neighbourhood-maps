@@ -27,10 +27,10 @@
     <div class="container">
         <div class="sidebar">
             <div>
-                 <input id="address" type="text"> <button>btn</button>
+                 <input id="filter" type="text"> <button>btn</button>
             </div>
             <ul data-bind="foreach: model">
-                <li data-bind = "text: title"></li>
+                <li data-bind = "text: title, visible: visible"></li>
             </ul>
         </div>
         <div class="main">

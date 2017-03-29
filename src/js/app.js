@@ -31,10 +31,11 @@ function drawmark() {
             var marker = new google.maps.Marker({
                 position: {lat: e.geometry.location.lat(), lng: e.geometry.location.lng()},
                 map: w.map,
-                title: e.name
+                title: e.name,
+                // visible: !!(i%2)
             })
             model.push(marker);
-            console.log(e);
+            // console.log(e);
         })
         ko.applyBindings(model);
 
@@ -42,5 +43,19 @@ function drawmark() {
     });
 
 }
-
+$('#filter').change(function(e){
+    console.log(e.target.value)
+})
 //AIzaSyAGnhR_0_6K7xOjz3Jy15uoz06JlTi6mME
+$.ajax({
+       type: "GET",
+       url: 'http://openapi.aibang.com/bus/lines?app_key=f41c8afccc586de03a99c86097e98ccb&city=杭州&q=113&alt=json',
+       contentType:"application/json",
+    //    dataType:'jsonp',
+    //    jsonp: "callback",
+       success: function (result, status){
+           console.log(status)
+           console.dir(result);
+       }
+});
+// http://openapi.aibang.com/bus/lines?app_key=f41c8afccc586de03a99c86097e98ccb&city=杭州&q=1
