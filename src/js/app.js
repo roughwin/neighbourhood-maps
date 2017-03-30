@@ -34,6 +34,7 @@ function drawmark() {
                 title: e.name,
                 // visible: !!(i%2)
             })
+            
             model.push(marker);
             // console.log(e);
         })
@@ -44,12 +45,21 @@ function drawmark() {
 
 }
 $('#filter').change(function(e){
-    console.log(e.target.value)
+    var value = e.target.value;
+    model(model().map(function(marker,index) {
+        if(marker.title.match(value)){
+            marker.visible = true;
+        }else{
+            marker.visible = false;
+        }
+        marker.setMap(map);
+        return marker
+    }));
 })
-//AIzaSyAGnhR_0_6K7xOjz3Jy15uoz06JlTi6mME
+
 $.ajax({
        type: "GET",
-       url: 'http://openapi.aibang.com/bus/lines?app_key=f41c8afccc586de03a99c86097e98ccb&city=杭州&q=113&alt=json',
+       url: juhe_url,
        contentType:"application/json",
     //    dataType:'jsonp',
     //    jsonp: "callback",
@@ -58,4 +68,3 @@ $.ajax({
            console.dir(result);
        }
 });
-// http://openapi.aibang.com/bus/lines?app_key=f41c8afccc586de03a99c86097e98ccb&city=杭州&q=1
