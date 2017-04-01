@@ -25,11 +25,11 @@
 </head>
 <body>
     <div class="container">
-        <div class="sidebar">
+        <div class="sidebar" data-bind = "with: model">
             <div>
-                 <input id="filter" type="text"> <button>btn</button>
+                 <input id="filter" type="text" data-bind = "value: inputval, event:{change: inputChange}"> <button>btn</button>
             </div>
-            <ul data-bind="foreach: model">
+            <ul data-bind = "foreach: items">
                 <li data-bind = "text: title, visible: visible"></li>
             </ul>
         </div>
@@ -42,7 +42,7 @@
     <script src="https://cdn.bootcss.com/knockout/3.4.2/knockout-min.js"></script>
     <script src="./js/app.js"></script>
 
-    <script async defer src="https://maps.google.cn/maps/api/js?key=AIzaSyAGnhR_0_6K7xOjz3Jy15uoz06JlTi6mME&libraries=places&callback=initMap"></script>
+    <script async defer src="https://maps.google.cn/maps/api/js?key=AIzaSyAGnhR_0_6K7xOjz3Jy15uoz06JlTi6mME&libraries=places&callback=init"></script>
 
     <script src="./jasmine/lib/jasmine-2.1.2/jasmine.js"></script>
     <script src="jasmine/lib/jasmine-2.1.2/jasmine-html.js"></script>
