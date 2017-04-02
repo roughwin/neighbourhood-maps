@@ -37,17 +37,38 @@ function init() {
         }
         this.setIcon(icon);     
     }
+    google.maps.Marker.prototype.openWindow = function() {
+        closeWindow();
+        this.infoWindow.open(map, this);
+    }
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 30.286077066609675, lng: 120.11394867673516},
         zoom: 15
     });
     loadData(model.items,function(m){
         // loadDetail(m);
+        var list = m().map(function(e,i) {
+            return e.title;
+        })
+        console.log(list)
+        getDetail(list, function(response){
+            m(m().map(function(e,i){
+                e.stationInfo = response[e.title]
+                e.infoWindow = new google.maps.InfoWindow({
+                    content: e.stationInfo
+                });
+                return e
+            }))
+        })
         dispMarker(model.items);
-    });
+    }.bind(null, model.items));
     
 }
-
+function closeWindow(){
+    model.items().forEach(function(e){
+        e.infoWindow.close();
+    })
+}
 function render(m){
     m(m());
     m().forEach(function(e){
@@ -117,25 +138,17 @@ function inputChange(m){
     m.items.removeAll();
     m.items(list);
 }
-function getDetail(){
+function getDetail(list, callback){
     var xhr = new XMLHttpRequest();
     xhr.timeout = 3000;
     xhr.responseType = "";
     xhr.onload = function(){
-        window.res = this
-        console.log(JSON.parse(this.responseText))
+        // window.res = this
+        // console.log(JSON.parse(this.responseText))
+        callback(JSON.parse(this.responseText));
     }
 
-    var data = {'city': "杭州",s:['益乐路文一西路口',
-'益乐新村',
-'益乐路口',
-'文二西路丰潭路口',
-'丰潭路文一西路口',
-'文二西路东口',
-'益乐村',
-'金色蓝庭公交站',
-'西斗门',
-'文一西路东口']};
+    var data = {'city': "杭州",s:list};
     xhr.open('post','http://busapi.applinzi.com/api',true) 
     xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded'); 
 
@@ -157,7 +170,7 @@ function encodeFormData(data){
     }
     return pairs.join('&');
 }
-getDetail()
+// getDetail()
 // $.ajax({
 //        type: "GET",
 //        url: 'http://busapi.applinzi.com/api',

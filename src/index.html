@@ -30,7 +30,7 @@
                  <input id="filter" type="text" data-bind = "value: inputval, event:{change: inputChange}"> <button>btn</button>
             </div>
             <ul data-bind = "foreach: items">
-                <li data-bind = "text: title, visible: visible, event:{ mouseover: setLarge, mouseout: setNormal}"></li>
+                <li data-bind = "text: title, visible: visible, event:{ mouseover: setLarge, mouseout: setNormal, click: $data.openWindow}"></li>
             </ul>
         </div>
         <div class="main">
