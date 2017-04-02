@@ -5,12 +5,8 @@ var model = {
     inputval:ko.observable(),
     items: ko.observableArray()
 }
-//ko.observableArray();
+
 var icon, icon_large;
-  var shape = {
-    coords: [1, 1, 1, 20, 18, 20, 18, 1],
-    type: 'poly'
-  };
 function init() {
     icon = {
         url: './img/spotlight-poi_hdpi.png',
@@ -26,11 +22,11 @@ function init() {
         anchor: new google.maps.Point(22/2, 80/2),
         scaledSize: new google.maps.Size(44/2, 80/2)
     };
-    google.maps.Marker.prototype.mouseover = function() {
+    google.maps.Marker.prototype.setLarge = function() {
         this.selected = true;
         this.setSelect();
     }
-    google.maps.Marker.prototype.mouseout = function() {
+    google.maps.Marker.prototype.setNormal = function() {
         this.selected = false;
         this.setSelect();
     }
@@ -52,15 +48,6 @@ function init() {
     
 }
 
-// function initMap(map, center){
-//     map = new google.maps.Map(document.getElementById('map'), {
-//         center: center,
-//         zoom: 15
-//     });
-//     // map.addListener('click', function(e) {
-//     //     console.log({lat: e.latLng.lat(), lng: e.latLng.lng()})
-//     // })
-// }
 function render(m){
     m(m());
     m().forEach(function(e){
@@ -103,7 +90,7 @@ function loadData(items,callback){
                 position: {lat: e.geometry.location.lat(), lng: e.geometry.location.lng()},
                 title: e.name,
                 icon: icon,
-                visible: i%2?true:false,
+                // visible: i%2?true:false,
                 zIndex: 1,
                 selected: false
             })
@@ -115,43 +102,87 @@ function loadData(items,callback){
     });
 }
 
-// $('#filter').change(function(e){
-//     var value = e.target.value;
-//     model.items(model.items().map(function(marker,index) {
-//         if(marker.title.match(value)){
-//             marker.visible = true;
-//         }else{
-//             marker.visible = false;
-//         }
-//         marker.setMap(map);
-//         return marker
-//     }));
-// })
+
 function inputChange(m){
     var value = m.inputval();
-    // console.log(value)
-    var list = model.items().map(function(marker,index) {
+    var list = m.items().map(function(marker,index) {
         if(marker.title.match(value)){
             marker.visible = true;
-            marker.title0 = 'val';
         }else{
             marker.visible = false;
-            marker.title0 = 'val'
         }
         marker.setMap(map);
         return marker
     });
-    // window.list = list
-    // console.log(list)
-    model.items.removeAll();
-    model.items(list);
+    m.items.removeAll();
+    m.items(list);
 }
-$.ajax({
-       type: "GET",
-       url: juhe_url,
-       contentType:"application/json",
-       success: function (result, status){
-           console.log(status)
-           console.dir(result);
-       }
-});
+function getDetail(){
+    var xhr = new XMLHttpRequest();
+    xhr.timeout = 3000;
+    xhr.responseType = "";
+    xhr.onload = function(){
+        window.res = this
+        console.log(JSON.parse(this.responseText))
+    }
+
+    var data = {'city': "杭州",s:['益乐路文一西路口',
+'益乐新村',
+'益乐路口',
+'文二西路丰潭路口',
+'丰潭路文一西路口',
+'文二西路东口',
+'益乐村',
+'金色蓝庭公交站',
+'西斗门',
+'文一西路东口']};
+    xhr.open('post','http://busapi.applinzi.com/api',true) 
+    xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded'); 
+
+    xhr.send(encodeFormData(data));
+    // ontimeout = this.ontimeout.bind(this.xhr)
+    // onerror = this.onerror.bind(this.xhr)
+    
+}
+function encodeFormData(data){
+    if(!data) return '';
+    var pairs = [];
+    for(var name in data){
+        if(!data.hasOwnProperty(name)) continue;
+        if(typeof data[name] === 'function') continue;
+        var value = data[name].toString();
+        name = encodeURIComponent(name.replace('%20','+'));
+        value = encodeURIComponent(value.replace('%20','+'));
+        pairs.push(name+'='+value);
+    }
+    return pairs.join('&');
+}
+getDetail()
+// $.ajax({
+//        type: "GET",
+//        url: 'http://busapi.applinzi.com/api',
+//     //    data: JSON.stringify({"city": "feedUrl","s":'hello'}),
+//        contentType:"application/json",
+//        success: function (result, status){
+//            console.log(status)
+//            console.dir(result);
+//        },
+//        dataType:'json'
+// });
+    //  $.ajax({
+    //    type: "POST",
+    //    url: 'http://busapi.applinzi.com/api',
+    //    data: JSON.stringify({city: 'haha',s: '123'}),
+    //    contentType:"application/json",
+    //    success: function (result, status){
+    //        console.log(result)
+                
+    //            },
+    //    error: function (result, status, err){
+    //              // 如果有错，就不解析结果而是只运行回调函数。
+    //              if (cb) {
+    //                  cb();
+    //              }
+    //            },
+    //    dataType: "json"
+    //  });
