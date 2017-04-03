@@ -76,17 +76,8 @@ function init() {
     }.bind(null, model.items));
     
 }
-// function closeWindow(){
-//     model.items().forEach(function(e){
-//         e.infoWindow.close();
-//     })
-// }
-function render(m){
-    m(m());
-    m().forEach(function(e){
-        e.setSelect()
-    })
-}
+
+
 function dispMarker(m) {
     m().forEach(function(marker,i) {
         marker.setMap(map);
@@ -97,7 +88,7 @@ function loadData(items,callback){
     var service = new google.maps.places.PlacesService(map);
     var request = {
         location: {lat: 30.284863403785405, lng: 120.11222183704376},
-        radius: '500',
+        // radius: '500',
         query: 'bus stop'
     };
     
