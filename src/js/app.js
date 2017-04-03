@@ -3,8 +3,16 @@ var stops = [];
 var map;
 var model = {
     inputval:ko.observable(),
-    items: ko.observableArray()
+    items: ko.observableArray(),
+    infoWindow: undefined
 }
+// var model = new function() {
+//     this.inputval = ko.observable();
+//     this.items = ko.observableArray();
+//     this.test = ko.computed(function() {
+//         return 'test: ' + this.inputval()
+//     },this)
+// }
 
 var icon, icon_large;
 function init() {
@@ -38,25 +46,29 @@ function init() {
         this.setIcon(icon);     
     }
     google.maps.Marker.prototype.openWindow = function() {
-        closeWindow();
-        this.infoWindow.open(map, this);
+        model.infoWindow.close();
+        model.infoWindow.open(map);
+        model.infoWindow.setContent( this.stationInfo)
+        model.infoWindow.setPosition(this.position)
     }
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 30.286077066609675, lng: 120.11394867673516},
         zoom: 15
     });
+    map.addListener('click',function() {
+        model.infoWindow.close()
+    })
+    model.infoWindow  = new google.maps.InfoWindow();
+
     loadData(model.items,function(m){
         // loadDetail(m);
         var list = m().map(function(e,i) {
             return e.title;
         })
-        console.log(list)
+        // console.log(list)
         getDetail(list, function(response){
             m(m().map(function(e,i){
                 e.stationInfo = response[e.title]
-                e.infoWindow = new google.maps.InfoWindow({
-                    content: e.stationInfo
-                });
                 return e
             }))
         })
@@ -64,11 +76,11 @@ function init() {
     }.bind(null, model.items));
     
 }
-function closeWindow(){
-    model.items().forEach(function(e){
-        e.infoWindow.close();
-    })
-}
+// function closeWindow(){
+//     model.items().forEach(function(e){
+//         e.infoWindow.close();
+//     })
+// }
 function render(m){
     m(m());
     m().forEach(function(e){
@@ -80,23 +92,7 @@ function dispMarker(m) {
         marker.setMap(map);
     })
 }
-function loadDetail(m) {
-    var query = [];
-    m().forEach(function(station,i) {
-        query.push(station.title);
-    })
-    var apiurl = ''+query.join('+')
-    $.ajax({
-        type: "GET",
-        url: apiurl,
-        contentType:"application/json",
-        success: function (result, status){
-            // console.log(status)
-            // console.dir(result);
 
-        }
-    });
-}
 function loadData(items,callback){   
     var service = new google.maps.places.PlacesService(map);
     var request = {
@@ -104,6 +100,7 @@ function loadData(items,callback){
         radius: '500',
         query: 'bus stop'
     };
+    
     service.textSearch(request, function(result, status){
         items.removeAll();
         result.forEach(function(e,i) {
@@ -111,14 +108,15 @@ function loadData(items,callback){
                 position: {lat: e.geometry.location.lat(), lng: e.geometry.location.lng()},
                 title: e.name,
                 icon: icon,
-                // visible: i%2?true:false,
                 zIndex: 1,
-                selected: false
+                selected: false,
+                stationInfo: 'loading..'
             })
+            marker.addListener('click', marker.openWindow)
             items.push(marker);
         })
         callback();
-                ko.applyBindings(model);
+        ko.applyBindings(model);
 
     });
 }
@@ -170,32 +168,3 @@ function encodeFormData(data){
     }
     return pairs.join('&');
 }
-// getDetail()
-// $.ajax({
-//        type: "GET",
-//        url: 'http://busapi.applinzi.com/api',
-//     //    data: JSON.stringify({"city": "feedUrl","s":'hello'}),
-//        contentType:"application/json",
-//        success: function (result, status){
-//            console.log(status)
-//            console.dir(result);
-//        },
-//        dataType:'json'
-// });
-    //  $.ajax({
-    //    type: "POST",
-    //    url: 'http://busapi.applinzi.com/api',
-    //    data: JSON.stringify({city: 'haha',s: '123'}),
-    //    contentType:"application/json",
-    //    success: function (result, status){
-    //        console.log(result)
-                
-    //            },
-    //    error: function (result, status, err){
-    //              // 如果有错，就不解析结果而是只运行回调函数。
-    //              if (cb) {
-    //                  cb();
-    //              }
-    //            },
-    //    dataType: "json"
-    //  });
