@@ -28,7 +28,7 @@
     <div class="container">
         <div class="sidebar">
             <div>
-                 <input id="filter" type="text" data-bind = "value: inputval, event:{change: inputChange}"> <button>btn</button>
+                 <input id="filter" type="text" data-bind = "value: inputval, event:{change: inputChange, focus: showList, blur: hideList}">
             </div>
             <ul data-bind = "foreach: items">
                 <li data-bind = "text: title, visible: visible, event:{ mouseover: setLarge, mouseout: setNormal, click: $data.openWindow}"></li>

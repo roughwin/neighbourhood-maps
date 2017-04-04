@@ -1,6 +1,10 @@
 {
   "devDependencies": {
     "browser-sync": "^2.18.8",
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^7.1.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^2.1.1",
     "gulp": "^3.9.1",
     "gulp-delete-lines": "^0.0.7",
     "gulp-minifier": "^0.2.1"
