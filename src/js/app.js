@@ -1,4 +1,6 @@
 var map;
+
+//mvvm 中的model
 var model = {
     inputval:ko.observable(),
     items: ko.observableArray(),
@@ -7,6 +9,10 @@ var model = {
 
 
 var icon, icon_large;
+/**
+ * function init()
+ * google map api 的回调函数，实现了app的初始化
+ */
 function init() {
     var gmaps = google.maps;
     icon = {
@@ -23,6 +29,7 @@ function init() {
         anchor: new gmaps.Point(22/2, 80/2),
         scaledSize: new gmaps.Size(44/2, 80/2)
     };
+
     initMarker(gmaps.Marker.prototype);
     map = new gmaps.Map(document.getElementById("map"), {
         center: {lat: 30.286077066609675, lng: 120.11394867673516},
@@ -47,7 +54,12 @@ function init() {
     }.bind(null, model.items));
     
 }
-
+/**
+ * function initMarker()
+ * 在google.maps.Marker类的基础上进行扩展
+ * 添加了Marker的放大缩小功能，infoWindow的弹出功能等
+ * @param {*} proto 
+ */
 function initMarker(proto){
     proto.setLarge = function() {
         this.selected = true;
@@ -72,12 +84,21 @@ function initMarker(proto){
     };
 
 }
+/**
+ * 实现了地图中 Marker的展示。
+ * station数据加载完成后调用
+ * @param {*} m 
+ */
 function dispMarker(m) {
     m().forEach(function(marker,i) {
         marker.setMap(map);
     });
 }
-
+/**
+ * 实现了bus stop信息的查询，完成Marker的初始化
+ * @param {*} items 
+ * @param {*} callback 
+ */
 function loadData(items,callback){   
     var service = new google.maps.places.PlacesService(map);
     var request = {
@@ -128,6 +149,13 @@ function inputChange(m){
     m.items.removeAll();
     m.items(list);
 }
+/**
+ * 调用DIY 的公交信息查询接口
+ * 该服务部署在SAE
+ * CORS跨域
+ * @param {*} list 
+ * @param {*} callback 
+ */
 function getDetail(list, callback){
     var xhr = new XMLHttpRequest();
     xhr.timeout = 3000;
@@ -148,6 +176,10 @@ function getDetail(list, callback){
         console.log("网络异常。");
     };    
 }
+/**
+ * 用于post data的生成
+ * @param {*} data 
+ */
 function encodeFormData(data){
     if(!data) return "";
     var pairs = [];
