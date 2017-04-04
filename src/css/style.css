@@ -34,7 +34,6 @@
         transform: translateY(0);
     }
     .main{
-        /*align-self: flex-start;*/
         margin-top: 1rem;
         width: 100%;
     }
