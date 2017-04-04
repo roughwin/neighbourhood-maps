@@ -52,7 +52,7 @@ gulp.task('ser', function () {
         }
     })
 
-    gulp.watch(['./src/**/*+(html|js|css)'].concat(ignore_path)).on('change',function () {
-        reload();
-    })
+    // gulp.watch(['./src/**/*+(html|js|css)'].concat(ignore_path)).on('change',function () {
+    //     reload();
+    // })
 })
