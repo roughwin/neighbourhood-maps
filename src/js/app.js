@@ -8,49 +8,30 @@ var model = {
 
 var icon, icon_large;
 function init() {
+    var gmaps = google.maps;
     icon = {
         url: "./img/spotlight-poi_hdpi.png",
-        size: new google.maps.Size(44, 80),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(22/4, 80/4),
-        scaledSize: new google.maps.Size(44/4, 80/4)
+        size: new gmaps.Size(44, 80),
+        origin: new gmaps.Point(0, 0),
+        anchor: new gmaps.Point(22/4, 80/4),
+        scaledSize: new gmaps.Size(44/4, 80/4)
     };
     icon_large = {
         url: "./img/spotlight-poi_hdpi.png",
-        size: new google.maps.Size(44, 80),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(22/2, 80/2),
-        scaledSize: new google.maps.Size(44/2, 80/2)
+        size: new gmaps.Size(44, 80),
+        origin: new gmaps.Point(0, 0),
+        anchor: new gmaps.Point(22/2, 80/2),
+        scaledSize: new gmaps.Size(44/2, 80/2)
     };
-    google.maps.Marker.prototype.setLarge = function() {
-        this.selected = true;
-        this.setSelect();
-    };
-    google.maps.Marker.prototype.setNormal = function() {
-        this.selected = false;
-        this.setSelect();
-    };
-    google.maps.Marker.prototype.setSelect = function(){
-        if(this.selected){
-            this.setIcon(icon_large);
-            return;
-        }
-        this.setIcon(icon);     
-    };
-    google.maps.Marker.prototype.openWindow = function() {
-        model.infoWindow.close();
-        model.infoWindow.open(map);
-        model.infoWindow.setContent( this.stationInfo);
-        model.infoWindow.setPosition(this.position);
-    };
-    map = new google.maps.Map(document.getElementById("map"), {
+    initMarker(gmaps.Marker.prototype);
+    map = new gmaps.Map(document.getElementById("map"), {
         center: {lat: 30.286077066609675, lng: 120.11394867673516},
         zoom: 15
     });
     map.addListener("click",function() {
         model.infoWindow.close();
     });
-    model.infoWindow  = new google.maps.InfoWindow();
+    model.infoWindow  = new gmaps.InfoWindow();
 
     loadData(model.items,function(m){
         var list = m().map(function(e,i) {
@@ -58,7 +39,7 @@ function init() {
         });
         getDetail(list, function(response){
             m(m().map(function(e,i){
-                e.stationInfo = response[e.title];
+                e.stationInfo = response[e.title]=="lost" ? "车站信息暂未收录" : response[e.title];
                 return e;
             }));
         });
@@ -67,7 +48,30 @@ function init() {
     
 }
 
+function initMarker(proto){
+    proto.setLarge = function() {
+        this.selected = true;
+        this.setSelect();
+    };
+    proto.setNormal = function() {
+        this.selected = false;
+        this.setSelect();
+    };
+    proto.setSelect = function(){
+        if(this.selected){
+            this.setIcon(icon_large);
+            return;
+        }
+        this.setIcon(icon);     
+    };
+    proto.openWindow = function() {
+        model.infoWindow.close();
+        model.infoWindow.open(map);
+        model.infoWindow.setContent( this.stationInfo);
+        model.infoWindow.setPosition(this.position);
+    };
 
+}
 function dispMarker(m) {
     m().forEach(function(marker,i) {
         marker.setMap(map);
@@ -78,7 +82,6 @@ function loadData(items,callback){
     var service = new google.maps.places.PlacesService(map);
     var request = {
         location: {lat: 30.284863403785405, lng: 120.11222183704376},
-        // radius: '500',
         query: "bus stop"
     };
     
@@ -130,8 +133,6 @@ function getDetail(list, callback){
     xhr.timeout = 3000;
     xhr.responseType = "";
     xhr.onload = function(){
-        // window.res = this
-        // console.log(JSON.parse(this.responseText))
         callback(JSON.parse(this.responseText));
     };
 
@@ -140,9 +141,12 @@ function getDetail(list, callback){
     xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded"); 
 
     xhr.send(encodeFormData(data));
-    // ontimeout = this.ontimeout.bind(this.xhr)
-    // onerror = this.onerror.bind(this.xhr)
-    
+    xhr.timeout = function() {
+        alert("车站信息加载超时");
+    };
+    xhr.error = function() {
+        console.log("网络异常。");
+    };    
 }
 function encodeFormData(data){
     if(!data) return "";
