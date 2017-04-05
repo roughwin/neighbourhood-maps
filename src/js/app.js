@@ -135,20 +135,25 @@ function hideList() {
     },100);
 }
 function inputChange(m){
-    var value = m.inputval();
-    var list = m.items().map(function(marker,index) {
-        if(marker.title.match(value)){
-            marker.visible = true;
-        }else{
-            marker.visible = false;
-        }
-        marker.setMap(map);
-        return marker;
-    });
-    m.infoWindow.close();
-    m.items.removeAll();
-    m.items(list);
+    window.clearTimeout(window.keypressTimer);
+    window.keypressTimer = window.setTimeout(function() {
+        var value = m.inputval();
+        var list = m.items().map(function(marker,index) {
+            if(marker.title.match(value)){
+                marker.visible = true;
+            }else{
+                marker.visible = false;
+            }
+            marker.setMap(map);
+            return marker;
+        });
+        m.infoWindow.close();
+        m.items.removeAll();
+        m.items(list);
+    },500);
+    return true;
 }
+
 /**
  * 调用DIY 的公交信息查询接口
  * 该服务部署在SAE
