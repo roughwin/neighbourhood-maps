@@ -4,16 +4,27 @@ var map;
 var model = {
     inputval:ko.observable(),
     items: ko.observableArray(),
-    infoWindow: undefined
+    infoWindow: undefined,
+    tips: ko.observable(""),
 };
-
-
+ko.applyBindings(model);
+/**
+ * 加载超时检测
+ */
+var mapTimeout = setTimeout(function() {
+    model.tips("地图加载超时");
+}, 5000);
 var icon, icon_large;
 /**
  * function init()
  * google map api 的回调函数，实现了app的初始化
  */
 function init() {
+    window.clearTimeout(mapTimeout);
+    if(!google.maps){
+        console.log('load fail.');
+        return;
+    }
     var gmaps = google.maps;
     icon = {
         url: "./img/spotlight-poi_hdpi.png",
@@ -121,7 +132,6 @@ function loadData(items,callback){
             items.push(marker);
         });
         callback();
-        ko.applyBindings(model);
 
     });
 }
@@ -197,4 +207,11 @@ function encodeFormData(data){
         pairs.push(name+"="+value);
     }
     return pairs.join("&");
+}
+/**
+ * 
+ * google map api权限检测
+ */
+function gm_authFailure() {
+    model.tips("Google Map无权访问");
 }
