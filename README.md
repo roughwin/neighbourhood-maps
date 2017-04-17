@@ -1,7 +1,24 @@
 # 街区地图
 ## 简介
 
-**街区地图** 利用google maps api、公交信息数据库等，实现了**杭州市**公交车站地理位置信息的展示的功能
+**街区地图** 是 **Udacity前端进阶** **纳米学位** 的实践项目。
+
+基于google maps api、公交信息数据库等，实现了**杭州市**公交车站地理位置信息的展示的功能
+
+项目要求全部实现：
+
+* Google Map API 加载，以及加载失败的检测
+* 基于Knockout实现Model、View分离
+* 第三方API的使用
+* 地标展示、列表显示
+* 移动设备响应性
+* 输入框的筛选功能
+
+暂未实现：
+
+* 改变地图显示范围
+* 显示样式的完善
+* 加入国内可用的地图API
 
 #### 在线访问：[src](http://git.roughwin.com/neighbourhood-maps/src/index.html)  or [dist](http://git.roughwin.com/neighbourhood-maps/dist/index.html)
 
