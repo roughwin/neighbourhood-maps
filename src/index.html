@@ -16,6 +16,9 @@
             font-size: 1.5rem;
             background-color: lightyellow;
         }
+        h2 {
+            margin: 0;
+        }
         #map {
             width: 100%;
             height: 95vh;
@@ -60,7 +63,8 @@
                 width: 100%;
             }
             .sidebar ul {
-                width: 50%;
+                width: auto;
+                padding: 0 .5rem 0 .5rem; 
                 position: absolute;
                 transform: translateX(-120%);
                 background-color: white;
@@ -80,6 +84,10 @@
     <link rel="stylesheet" href="./jasmine/lib/jasmine-2.1.2/jasmine.css">
 </head>
 <body>
+    <header>
+        <h2>街区地图</h2>
+    </header>
+    
     <div class="container">
         <div class="sidebar">
             <div>
