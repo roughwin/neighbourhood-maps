@@ -28,12 +28,25 @@
         .container div {
             box-sizing: border-box;
         }
+        .container .sidebar input {
+            outline: none;
+            height: 2rem;
+            width: 90%;
+            font-size: 1.5rem;
+        }
         .container ul {
             list-style: none;
-            padding: 0;
+            padding: 0 0 0 5px;
+            width: 90%;
         }
+        
         .container li {
             cursor: pointer;
+            margin-top: .5rem;
+            color: #333333;
+        }
+        .container li:hover {
+            color: #003300;
         }
         .sidebar {
             width: 30%;
@@ -47,11 +60,12 @@
                 width: 100%;
             }
             .sidebar ul {
+                width: 50%;
                 position: absolute;
-                transform: translateX(-150px);
-                background-color: rgba(0, 0, 0, 0.7);
+                transform: translateX(-120%);
+                background-color: white;
                 z-index: 2;
-                color: white;
+                color: black;
                 transition: transform 0.5s;
             }
             .sidebar ul.show {
@@ -86,10 +100,5 @@
 
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQHFgjGAZ5UFp28eTHJtVEX4RyfCet4PE&libraries=places&callback=init"></script>
 
-    <!--<script src="./jasmine/lib/jasmine-2.1.2/jasmine.js"></script>
-    <script src="jasmine/lib/jasmine-2.1.2/jasmine-html.js"></script>
-    <script src="jasmine/lib/jasmine-2.1.2/boot.js"></script>-->
-
-    <!--<script src="./jasmine/spec/spec-map.js"></script>-->
 </body>
 </html>
