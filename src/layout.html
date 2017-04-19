@@ -5,13 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <style>
+        .container {
+            display: flex;
+            padding: 0;
+        }
+        .container>div {
+            box-sizing: border-box;
+            transition: width .3s,
+                        transform .3s;
+        }
+        .sidebar {
+            width: 30%;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .side-hide>.sidebar {
+            transform: translateX(-30vw);
+            width: 0;
+        }
+        .side-hide>.main{
+            width: 100%;
+        }
+        .main {
+            width: 70%;
+            height: 100vh;
+        }
         
+        .main .map-top {
+            height: 3rem;
+            width: 100%;
+        }
+        .main .map-top span {
+            cursor: pointer;
+        }
+        /*******/
+        div {
+            border: 1px solid cornflowerblue;
+        }
     </style>
     <title>Layout-test</title>
 </head>
 <body>
     <h1>Header</h1>
-    <div>Side bar</div>
-    <div>Map</div>
+    <div class="container">
+        <div class="sidebar">Side bar</div>
+        <div class="main">
+            <div class="map-top">
+                <span>H</span>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+
+    <script>
+        var sidebar = document.querySelector('.sidebar');
+        var main = document.querySelector('.main');
+        $(".map-top span").click(function() {
+            $(".container").toggleClass('side-hide')
+        });
+        
+        window.setTimeout(function() {
+            console.log('deal');
+            
+        },1000)
+    </script>
 </body>
 </html>
