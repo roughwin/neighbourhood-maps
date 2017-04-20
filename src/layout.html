@@ -32,10 +32,19 @@
         }
         
         .main .map-top {
+            position: relative;
             height: 3rem;
             width: 100%;
         }
         .main .map-top span {
+            position: absolute;
+            left: 1rem;
+            top: 45%;
+            transform: translateY(-50%);
+            display: block;
+            width: 20px;
+            height: 14px;
+            background: url("./img/button.svg") transparent no-repeat;
             cursor: pointer;
         }
         /*******/
@@ -51,7 +60,7 @@
         <div class="sidebar">Side bar</div>
         <div class="main">
             <div class="map-top">
-                <span>H</span>
+                <span></span>
             </div>
         </div>
     </div>
@@ -64,10 +73,6 @@
             $(".container").toggleClass('side-hide')
         });
         
-        window.setTimeout(function() {
-            console.log('deal');
-            
-        },1000)
     </script>
 </body>
 </html>
