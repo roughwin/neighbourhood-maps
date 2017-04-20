@@ -95,6 +95,10 @@ function initMarker(proto){
     };
 
 }
+
+function toggleside() {    
+    $(".container").toggleClass('side-hide');   
+}
 /**
  * 实现了地图中 Marker的展示。
  * station数据加载完成后调用

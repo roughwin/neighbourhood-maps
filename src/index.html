@@ -30,6 +30,8 @@
         }
         .container div {
             box-sizing: border-box;
+            transition: width .3s,
+                        transform .3s;
         }
         .container .sidebar input {
             outline: none;
@@ -53,11 +55,35 @@
         }
         .sidebar {
             width: 30%;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .side-hide>.sidebar {
+            transform: translateX(-30vw);
+            width: 0;
+        }
+        .side-hide>.main{
+            width: 100%;
         }
         .main {
             width: 70%;
         }
-       
+        .main .map-top {
+            position: relative;
+            height: 3rem;
+            width: 100%;
+        }
+        .main .map-top span {
+            position: absolute;
+            left: 1rem;
+            top: 45%;
+            transform: translateY(-50%);
+            display: block;
+            width: 20px;
+            height: 14px;
+            background: url("./img/button.svg") transparent no-repeat;
+            cursor: pointer;
+        }
         @media screen and (max-width: 500px) {
             .container .sidebar {
                 width: 100%;
@@ -87,7 +113,7 @@
     <header>
         <h2>街区地图</h2>
     </header>
-    
+ 
     <div class="container">
         <div class="sidebar">
             <div>
@@ -98,6 +124,9 @@
             </ul>
         </div>
         <div class="main">
+            <div class="map-top">
+                <span data-bind = "event: {click: toggleside}"></span>
+            </div>
             <div id="map"></div>
         </div>
     </div>
@@ -107,6 +136,6 @@
     <script src="./js/app.js"></script>
 
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQHFgjGAZ5UFp28eTHJtVEX4RyfCet4PE&libraries=places&callback=init"></script>
-
+    
 </body>
 </html>
