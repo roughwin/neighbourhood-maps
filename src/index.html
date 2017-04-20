@@ -8,6 +8,8 @@
     <style>
         html,body {
             width: 100%;
+            padding: 0;
+            margin: 0;
         }
         div.tips {
             position: fixed;
@@ -55,6 +57,7 @@
         }
         .sidebar {
             width: 30%;
+            padding-left: 6px;
             overflow: hidden;
         }
         .side-hide>.sidebar {
@@ -62,9 +65,11 @@
             width: 0;
         }
         .side-hide>.main{
-            width: 100%;
+            width: calc(100% - 12px);
+            padding: 0 6px;
         }
         .main {
+            padding-right: 6px;
             width: 70%;
         }
         .main .map-top {
