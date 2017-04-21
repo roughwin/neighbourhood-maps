@@ -31,7 +31,7 @@ function init() {
         map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
         loadData(model.items);
     });
-
+    model.infoWindow  = new BMap.InfoWindow();
 }
 
 function convert(point,cb) {
@@ -70,23 +70,10 @@ function init0() {
     map.addListener("click",function() {
         model.infoWindow.close();
     });
-    model.infoWindow  = new gmaps.InfoWindow();
-    model.infoWindow.setOptions({
-        pixelOffset:new google.maps.Size(0,-10),
-        // maxWidth: 100,
-    });
-    loadData(model.items,function(m){
-        // var list = m().map(function(e,i) {
-        //     return e.title;
-        // });
-        // getDetail(list, function(response){
-        //     m(m().map(function(e,i){
-        //         e.stationInfo = response[e.title]=="lost" ? "车站信息暂未收录" : response[e.title];
-        //         return e;
-        //     }));
-        // });
-        dispMarker(model.items);
-    }.bind(null, model.items));
+    // model.infoWindow.setOptions({
+    //     pixelOffset:new google.maps.Size(0,-10),
+    //     // maxWidth: 100,
+    // });
     
 }
 /**
@@ -98,24 +85,29 @@ function init0() {
 function initMarker(proto){
     proto.setLarge = function() {
         this.selected = true;
-        this.setSelect();
+        this.setAnimation(BMAP_ANIMATION_BOUNCE);
     };
     proto.setNormal = function() {
         this.selected = false;
-        this.setSelect();
+        this.setAnimation(null);
     };
     proto.setSelect = function(){
-        if(this.selected){
-            this.setIcon(icon_large);
-            return;
-        }
-        this.setIcon(icon);     
+        console.log(this.selected);
+        window.icon = this.getIcon();
+        this.setAnimation(BMAP_ANIMATION_BOUNCE);
     };
     proto.openWindow = function() {
-        model.infoWindow.close();
-        model.infoWindow.open(map);
-        model.infoWindow.setContent( this.stationInfo);
-        model.infoWindow.setPosition(this.position);
+        model.infoWindow.setContent(this.stationInfo);
+        this.openInfoWindow(model.infoWindow);
+        this.open = true;
+    };
+    proto.toggleWindow = function() {
+        if(this.open){
+            this.closeInfoWindow();
+            this.open = false;
+            return;
+        }
+        this.openWindow();
     };
 
 }
@@ -162,11 +154,16 @@ function loadData(items) {
             // s.push(results.getPoi(i).title + ", " + results.getPoi(i).address); 
             curPosi = results.getPoi(i);
 
-            var marker = new BMap.Marker(curPosi.point);
+            var marker = new BMap.Marker(curPosi.point,{icon: icon});
             marker.title = curPosi.title;
             marker.visible = true;
             marker.selected= false;
             marker.stationInfo = curPosi.address;
+            marker.position = curPosi.point;
+            marker.open = false;
+            marker.addEventListener("click",function(type,target) {
+                this.toggleWindow();
+            }.bind(marker));
             items.push(marker);
             map.addOverlay(marker);
         }

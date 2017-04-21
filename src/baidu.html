@@ -122,7 +122,7 @@
                  <input id="filter" type="text" data-bind = "textInput: inputval, event:{ keydown: inputChange, focus: showList, blur: hideList}">
             </div>
             <ul data-bind = "foreach: items">
-                <li data-bind = "text: title, visible: visible, event:{ mouseover: setLarge, mouseout: setNormal, click: $data.openWindow}"></li>
+                <li data-bind = "text: title, visible: visible, event:{ mouseover: setLarge, mouseout: setNormal, click: $data.toggleWindow}"></li>
             </ul>
         </div>
         <div class="main">
