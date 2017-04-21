@@ -76,7 +76,7 @@ function initMarker(proto){
     proto.openWindow = function() {
         model.infoWindow.setContent(this.stationInfo);
         this.openInfoWindow(model.infoWindow);
-        this.open = true;
+        this.windowOpen = true;
     };
     proto.toggleWindow = function() {
         if(window.clickDelay)
@@ -84,13 +84,15 @@ function initMarker(proto){
         window.clickDelay = true;
         window.setTimeout(function() {
             window.clickDelay = false;
-            if(this.open){
+            if(this.windowOpen){
                 this.closeInfoWindow();
-                this.open = false;
                 return;
             }
             this.openWindow();
         }.bind(this),200);
+    };
+    proto.setWindowClose = function() {
+        this.windowOpen = false;
     };
 
 }
@@ -141,6 +143,7 @@ function loadData(items) {
             marker.addEventListener("click",marker.toggleWindow);
             marker.addEventListener("mouseover",marker.showLabel);
             marker.addEventListener("mouseout",marker.setNormal);
+            marker.addEventListener("infowindowclose",marker.setWindowClose);
             items.push(marker);
             map.addOverlay(marker);
         }
