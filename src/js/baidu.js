@@ -47,18 +47,32 @@ function convert(point,cb) {
  */
 function initMarker(proto){
     proto.setLarge = function() {
+        // console.log(true)
         this.selected = true;
-        this.setAnimation(BMAP_ANIMATION_BOUNCE);
+        window.setTimeout(function() {
+            if(this.selected){
+                this.getMap().panTo(this.position);
+                
+                this.showLabel();
+                this.setAnimation(BMAP_ANIMATION_BOUNCE);
+            }
+        }.bind(this) ,200);
     };
-    proto.setNormal = function() {
+    proto.showLabel = function() {
+        this.setTop(true);
+        this.setLabel(new BMap.Label(this.title,{offset: new BMap.Size(20,-10)}));
+    };
+    proto.setNormal = function() {        
         this.selected = false;
         this.setAnimation(null);
+        this.setTop(false);
+        this.getMap().removeOverlay(this.getLabel());
+        
     };
-    proto.setSelect = function(){
-        console.log(this.selected);
-        window.icon = this.getIcon();
-        this.setAnimation(BMAP_ANIMATION_BOUNCE);
-    };
+    // proto.setSelect = function(){
+    //     console.log(this.selected);
+    //     // this.setAnimation(BMAP_ANIMATION_BOUNCE);
+    // };
     proto.openWindow = function() {
         model.infoWindow.setContent(this.stationInfo);
         this.openInfoWindow(model.infoWindow);
@@ -121,7 +135,12 @@ function loadData(items) {
             marker.stationInfo = curPosi.address;
             marker.position = curPosi.point;
             marker.open = false;
+            
+            // marker.setTitle(curPosi.title);
+            // marker.setLabel(new BMap.Label(curPosi.title).setStyle({display:"none"}));
             marker.addEventListener("click",marker.toggleWindow);
+            marker.addEventListener("mouseover",marker.showLabel);
+            marker.addEventListener("mouseout",marker.setNormal);
             items.push(marker);
             map.addOverlay(marker);
         }
