@@ -1,54 +1,148 @@
 <!DOCTYPE html>
-<html lang="cn">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>街区地图</title>
     <style>
-        html,body{
+        html,body {
             width: 100%;
+            padding: 0;
+            margin: 0;
         }
-        #map{
+        div.tips {
+            position: fixed;
+            top: 9%;
+            right: 5%;
+            font-size: 1.5rem;
+            background-color: lightyellow;
+        }
+        h2 {
+            margin: 0;
+        }
+        #map {
             width: 100%;
-            height: 70vh;
+            height: 95vh;
+        }        
+        .container {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
         }
-        .container div{
+        .container div {
             box-sizing: border-box;
-            /*border: 1px solid red;*/
-            /*height: 3rem;*/
+            transition: width .3s,
+                        transform .3s;
         }
-       
+        .container .sidebar input {
+            outline: none;
+            height: 2rem;
+            width: 90%;
+            font-size: 1.5rem;
+        }
+        .container ul {
+            list-style: none;
+            padding: 0 0 0 5px;
+            width: 90%;
+        }
+        
+        .container li {
+            cursor: pointer;
+            margin-top: .5rem;
+            color: #333333;
+        }
+        .container li:hover {
+            color: #003300;
+        }
+        .sidebar {
+            width: 30%;
+            padding-left: 6px;
+            overflow: hidden;
+        }
+        .side-hide>.sidebar {
+            transform: translateX(-30vw);
+            width: 0;
+        }
+        .side-hide>.main{
+            width: calc(100% - 12px);
+            padding: 0 6px;
+        }
+        .main {
+            padding-right: 6px;
+            width: 70%;
+        }
+        .main .map-top {
+            position: relative;
+            height: 3rem;
+            width: 100%;
+        }
+        .main .map-top span {
+            position: absolute;
+            left: 1rem;
+            top: 45%;
+            transform: translateY(-50%);
+            display: block;
+            width: 20px;
+            height: 14px;
+            background: url("./img/button.svg") transparent no-repeat;
+            cursor: pointer;
+        }
+        @media screen and (max-width: 500px) {
+            .container .sidebar {
+                width: 100%;
+            }
+            .sidebar ul {
+                width: auto;
+                padding: 0 .5rem 0 .5rem; 
+                position: absolute;
+                transform: translateX(-120%);
+                background-color: white;
+                z-index: 2;
+                color: black;
+                transition: transform 0.5s;
+            }
+            .sidebar ul.show {
+                transform: translateY(0);
+            }
+            .main {
+                margin-top: 1rem;
+                width: 100%;
+            }
+            .main .map-top {
+                display: none;
+            }
+        }
     </style>
-    <!--should be inline.-->
-    <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./jasmine/lib/jasmine-2.1.2/jasmine.css">
 </head>
 <body>
+    <header>
+        <h2>街区地图</h2>
+    </header>
+ 
     <div class="container">
         <div class="sidebar">
             <div>
-                 <input id="filter" type="text" data-bind = "value: inputval, event:{change: inputChange, focus: showList, blur: hideList}">
+                 <input id="filter" type="text" data-bind = "textInput: inputval, event:{ keydown: inputChange, focus: showList, blur: hideList}">
             </div>
             <ul data-bind = "foreach: items">
                 <li data-bind = "text: title, visible: visible, event:{ mouseover: setLarge, mouseout: setNormal, click: $data.openWindow}"></li>
             </ul>
         </div>
         <div class="main">
+            <div class="map-top">
+                <span data-bind = "event: {click: toggleside}"></span>
+            </div>
             <div id="map"></div>
         </div>
     </div>
-
+    <div class='tips' data-bind = "html: tips, visible: tips"></div>
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/knockout/3.4.2/knockout-min.js"></script>
     <script src="./js/app.js"></script>
 
-    <script async defer src="https://maps.google.cn/maps/api/js?key=AIzaSyAGnhR_0_6K7xOjz3Jy15uoz06JlTi6mME&libraries=places&callback=init"></script>
-
-    <!--<script src="./jasmine/lib/jasmine-2.1.2/jasmine.js"></script>
-    <script src="jasmine/lib/jasmine-2.1.2/jasmine-html.js"></script>
-    <script src="jasmine/lib/jasmine-2.1.2/boot.js"></script>-->
-
-    <!--<script src="./jasmine/spec/spec-map.js"></script>-->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQHFgjGAZ5UFp28eTHJtVEX4RyfCet4PE&libraries=places&callback=init"></script>
+    
 </body>
 </html>
