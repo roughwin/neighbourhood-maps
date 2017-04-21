@@ -20,7 +20,7 @@ var mapTimeout = setTimeout(function() {
  */
 function init() {
     window.clearTimeout(mapTimeout);
-    map = new BMap.Map("map");    // 创建Map实例
+    map = new BMap.Map("map",{enableMapClick:false});    // 创建Map实例
     initMarker(BMap.Marker.prototype);
     convert(new BMap.Point(120.11222183704376,30.284863403785405), function(data) {
         //set Map
