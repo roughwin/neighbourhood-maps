@@ -14,7 +14,6 @@ ko.applyBindings(model);
 var mapTimeout = setTimeout(function() {
     model.tips("地图加载超时");
 }, 5000);
-var icon, icon_large;
 /**
  * function init()
  * baidu map api 的回调函数，实现了app的初始化
@@ -39,42 +38,6 @@ function convert(point,cb) {
     var pointArr = [];
     pointArr.push(point);
     convertor.translate(pointArr,3,5,cb);
-}
-function init0() {
-    window.clearTimeout(mapTimeout);
-    if(!google.maps){
-        console.log('load fail.');
-        return;
-    }
-    var gmaps = google.maps;
-    icon = {
-        url: "./img/spotlight-poi_hdpi.png",
-        size: new gmaps.Size(44, 80),
-        origin: new gmaps.Point(0, 0),
-        anchor: new gmaps.Point(22/4, 80/4),
-        scaledSize: new gmaps.Size(44/4, 80/4)
-    };
-    icon_large = {
-        url: "./img/spotlight-poi_hdpi.png",
-        size: new gmaps.Size(44, 80),
-        origin: new gmaps.Point(0, 0),
-        anchor: new gmaps.Point(22/2, 80/2),
-        scaledSize: new gmaps.Size(44/2, 80/2)
-    };
-
-    initMarker(gmaps.Marker.prototype);
-    map = new gmaps.Map(document.getElementById("map"), {
-        center: {lat: 30.286077066609675, lng: 120.11394867673516},
-        zoom: 15
-    });
-    map.addListener("click",function() {
-        model.infoWindow.close();
-    });
-    // model.infoWindow.setOptions({
-    //     pixelOffset:new google.maps.Size(0,-10),
-    //     // maxWidth: 100,
-    // });
-    
 }
 /**
  * function initMarker()
@@ -102,12 +65,18 @@ function initMarker(proto){
         this.open = true;
     };
     proto.toggleWindow = function() {
-        if(this.open){
-            this.closeInfoWindow();
-            this.open = false;
+        if(window.clickDelay)
             return;
-        }
-        this.openWindow();
+        window.clickDelay = true;
+        window.setTimeout(function() {
+            window.clickDelay = false;
+            if(this.open){
+                this.closeInfoWindow();
+                this.open = false;
+                return;
+            }
+            this.openWindow();
+        }.bind(this),200);
     };
 
 }
@@ -115,20 +84,11 @@ function initMarker(proto){
 function toggleside() {    
     $(".container").toggleClass('side-hide');   
 }
-/**
- * 实现了地图中 Marker的展示。
- * station数据加载完成后调用
- * @param {*} m 
- */
-function dispMarker(m) {
-    m().forEach(function(marker,i) {
-        marker.setMap(map);
-    });
-}
+
 /**
  * 实现了bus stop信息的查询，完成Marker的初始化
  * @param {*} items 
- * @param {*} callback 
+ * 
  */
 function loadData(items) {
     map.clearOverlays();
@@ -154,16 +114,14 @@ function loadData(items) {
             // s.push(results.getPoi(i).title + ", " + results.getPoi(i).address); 
             curPosi = results.getPoi(i);
 
-            var marker = new BMap.Marker(curPosi.point,{icon: icon});
+            var marker = new BMap.Marker(curPosi.point);
             marker.title = curPosi.title;
             marker.visible = true;
             marker.selected= false;
             marker.stationInfo = curPosi.address;
             marker.position = curPosi.point;
             marker.open = false;
-            marker.addEventListener("click",function(type,target) {
-                this.toggleWindow();
-            }.bind(marker));
+            marker.addEventListener("click",marker.toggleWindow);
             items.push(marker);
             map.addOverlay(marker);
         }
@@ -193,7 +151,6 @@ function inputChange(m){
             }
             return marker;
         });
-        // m.infoWindow.close();
         m.items.removeAll();
         m.items(list);
     },500);
