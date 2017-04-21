@@ -50,7 +50,10 @@ function init() {
         model.infoWindow.close();
     });
     model.infoWindow  = new gmaps.InfoWindow();
-
+    model.infoWindow.setOptions({
+        pixelOffset:new google.maps.Size(0,-10),
+        // maxWidth: 100,
+    });
     loadData(model.items,function(m){
         var list = m().map(function(e,i) {
             return e.title;
