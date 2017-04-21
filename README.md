@@ -3,6 +3,9 @@
 
 **街区地图** 是 **Udacity前端进阶** **纳米学位** 的实践项目。
 
+### Baidu API： [Baidu src](http://git.roughwin.com/neighbourhood-maps/src/baidu.html)  or [Baidu dist](http://git.roughwin.com/neighbourhood-maps/dist/baidu.html)
+### ~~Google API~~（弃用，可能访问失败，Baidu API方案已实现全部功能）：~~[src](http://git.roughwin.com/neighbourhood-maps/src/index.html)  or [dist](http://git.roughwin.com/neighbourhood-maps/dist/index.html)~~
+
 基于google maps api、公交信息数据库等，实现了**杭州市**公交车站地理位置信息的展示的功能
 
 项目要求全部实现：
@@ -18,9 +21,8 @@
 
 * 改变地图显示范围
 * 显示样式的完善
-* 加入国内可用的地图API
 
-#### 在线访问：[src](http://git.roughwin.com/neighbourhood-maps/src/index.html)  or [dist](http://git.roughwin.com/neighbourhood-maps/dist/index.html)
+
 
 ### 使用方法：
  
