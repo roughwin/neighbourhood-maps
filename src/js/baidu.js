@@ -22,13 +22,23 @@ function init() {
     window.clearTimeout(mapTimeout);
     map = new BMap.Map("map",{enableMapClick:false});    // 创建Map实例
     initMarker(BMap.Marker.prototype);
+    var geolocation = new BMap.Geolocation();
+    geolocation.getCurrentPosition(function(r){
+        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+            map.panTo(r.point);
+        }
+        else {
+            alert("定位失败： "+this.getStatus());
+        }
+        loadData(model.items);
+    },{enableHighAccuracy: true});
     convert(new BMap.Point(120.11222183704376,30.284863403785405), function(data) {
         //set Map
-    	map.centerAndZoom(data.points[0], 16);  // 初始化地图,设置中心点坐标和地图级别
+        map.centerAndZoom(data.points[0], 17);  // 初始化地图,设置中心点坐标和地图级别
         map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
         map.setCurrentCity("杭州");          // 设置地图显示的城市 此项是必须设置的
         map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-        loadData(model.items);
+        // loadData(model.items);
     });
     model.infoWindow  = new BMap.InfoWindow();
 }
@@ -98,7 +108,7 @@ function initMarker(proto){
 }
 
 function toggleside() {    
-    $(".container").toggleClass('side-hide');   
+    $(".container").toggleClass("side-hide");   
 }
 
 /**
@@ -108,7 +118,7 @@ function toggleside() {
  */
 function loadData(items) {
     map.clearOverlays();
-    
+    items.removeAll();
     var options = {      
         pageCapacity: 10,
         onSearchComplete: onSucess
