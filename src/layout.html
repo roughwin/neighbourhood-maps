@@ -4,67 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <style>
-        .container {
-            display: flex;
-            padding: 0;
-        }
-        .container>div {
-            box-sizing: border-box;
-            transition: width .3s,
-                        transform .3s;
-        }
-        .sidebar {
-            width: 30%;
-            height: 100vh;
-            overflow: hidden;
-        }
-        .side-hide>.sidebar {
-            transform: translateX(-30vw);
-            width: 0;
-        }
-        .side-hide>.main{
-            width: 100%;
-        }
-        .main {
-            width: 70%;
-            height: 100vh;
-        }
-        
-        .main .map-top {
-            position: relative;
-            height: 3rem;
-            width: 100%;
-        }
-        .main .map-top span {
-            position: absolute;
-            left: 1rem;
-            top: 45%;
-            transform: translateY(-50%);
-            display: block;
-            width: 20px;
-            height: 14px;
-            background: url("./img/button.svg") transparent no-repeat;
-            cursor: pointer;
-        }
-        /*******/
-        div {
-            border: 1px solid cornflowerblue;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/style.css">
     <title>Layout-test</title>
 </head>
 <body>
     <h1>Header</h1>
     <div class="container">
-        <div class="sidebar">Side bar</div>
-        <div class="main">
-            <div class="map-top">
-                <span></span>
-            </div>
+        <div id="map"></div>
+        <div id="ctrl">
+            <ul class="station-list">
+                <li class="station-item">Station</li>
+            </ul>
+            <ul class="line-list">
+                <li class="line-item"></li>
+            </ul>
         </div>
     </div>
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-    <script async src="https://roughwin.github.io/fp2.js"></script>
 </body>
 </html>

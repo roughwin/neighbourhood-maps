@@ -62,10 +62,7 @@ function init() {
     });
 }
 
-// function busSearch(){
-//     var busName = 180;
-//     busline.getBusList(busName);
-// }
+
 function convert(point,cb) {
     var convertor = new BMap.Convertor();
     var pointArr = [];
@@ -104,7 +101,7 @@ function initMarker(proto){
     };
     proto.openWindow = function() {
         model.infoWindow.setContent(this.stationInfo);
-        this.openInfoWindow(model.infoWindow);
+        // this.openInfoWindow(model.infoWindow);
         this.windowOpen = true;
         window.stationInfo = this.stationInfo;
         this.stationInfo.split(";").forEach(function(str) {

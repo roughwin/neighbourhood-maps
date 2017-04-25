@@ -3,6 +3,7 @@ const browserSync = require("browser-sync").create();
 const reload = browserSync.reload;
 const deleteLines = require("gulp-delete-lines");
 const minify = require("gulp-minifier");
+const sass = require("gulp-sass");
 
 var src_option = {
     base: "./src/",
@@ -48,6 +49,7 @@ var serFlag = false;
 
 gulp.task("ser", function () {
     gulp.watch("./src/**/*+(html|js|css)",['reload']);
+    gulp.watch("./src/css/**/*.scss",['sass']);
     browserSync.init({
         server: {
             baseDir: "./"
@@ -57,10 +59,16 @@ gulp.task("ser", function () {
 
     
 });
-
+gulp.task('sass',function() {
+    gulp.src('./src/css/scss/*.scss')
+        .pipe(sass().on('error', sass.logError))
+        .pipe(gulp.dest('./src/css'));
+})
 gulp.task('reload', function() {
     // console.log('file changed');
+    
     if(serFlag)
-        reload();
+        setTimeout(reload,300);
+        // reload();
 })
 
